@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deepfake Detection System | AI-Based Forensics Platform</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- FontAwesome 6 CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-void: #06080F;
+            --card-glass: rgba(15, 23, 42, 0.65);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(56, 189, 248, 0.4);
+            --cyan-electric: #38BDF8;
+            --indigo-ethereal: #818CF8;
+            --violet-neon: #A855F7;
+            --mint-authentic: #10B981;
+            --mint-glow: rgba(16, 185, 129, 0.25);
+            --crimson-deepfake: #EF4444;
+            --crimson-glow: rgba(239, 68, 68, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-void);
+            color: #F1F5F9;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Ambient Antigravity Glowing Orbs */
+        .ambient-glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.65;
+            animation: orb-drift 14s ease-in-out infinite alternate;
+        }
+
+        .ambient-glow-1 {
+            top: -60px;
+            left: 5%;
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.42) 0%, rgba(56, 189, 248, 0) 70%);
+        }
+
+        .ambient-glow-2 {
+            bottom: 5%;
+            right: 5%;
+            width: 620px;
+            height: 620px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.38) 0%, rgba(129, 140, 248, 0) 70%);
+            animation-duration: 18s;
+            animation-delay: -4s;
+        }
+
+        .ambient-glow-3 {
+            top: 35%;
+            left: 35%;
+            width: 480px;
+            height: 480px;
+            background: radial-gradient(circle, rgba(129, 140, 248, 0.32) 0%, rgba(6, 8, 15, 0) 70%);
+            animation-duration: 22s;
+            animation-delay: -8s;
+        }
+
+        @keyframes orb-drift {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, 40px) scale(1.08); }
+            100% { transform: translate(-25px, -30px) scale(0.95); }
+        }
+
+        /* Subtle Antigravity Levitation on Cards */
+        @keyframes float-levitate {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Scanline Animation */
+        @keyframes scan-beam {
+            0% { top: 0%; opacity: 0; }
+            15% { opacity: 1; }
+            85% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        /* Online Pulsating Dot */
+        @keyframes pulse-dot {
+            0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 7px rgba(56, 189, 248, 0); }
+            100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
+        }
+
+        /* Main Layout Content */
+        .portal-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Navigation Bar */
+        .portal-nav {
+            background: rgba(6, 8, 15, 0.75);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 1rem 0;
+        }
+
+        .brand-text {
+            font-weight: 800;
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #FFFFFF 0%, #CBD5E1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 9px;
+            height: 9px;
+            background-color: var(--cyan-electric);
+            border-radius: 50%;
+            margin-right: 6px;
+            animation: pulse-dot 2s infinite;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 12px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--border-subtle);
+            border-radius: 9999px;
+            font-size: 0.76rem;
+            font-weight: 500;
+            color: #94A3B8;
+        }
+
+        .badge-ai {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            color: #7DD3FC;
+            font-size: 0.74rem;
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 8px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-subtle);
+            color: #94A3B8;
+            font-size: 0.8rem;
+            padding: 6px 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(56, 189, 248, 0.15);
+            border-color: var(--cyan-electric);
+            color: #FFFFFF;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            padding: 3rem 0 2rem 0;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(168, 85, 247, 0.15));
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            color: #E2E8F0;
+            font-size: 0.82rem;
+            font-weight: 600;
+            padding: 6px 16px;
+            border-radius: 9999px;
+            margin-bottom: 1.25rem;
+            letter-spacing: 0.02em;
+        }
+
+        .hero-headline {
+            font-size: 2.75rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #FFFFFF 20%, #94A3B8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-tagline {
+            color: #94A3B8;
+            font-size: 1.05rem;
+            max-width: 780px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Antigravity Floating Glass Cards */
+        .glass-card {
+            background: var(--card-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
+            animation: float-levitate 6s ease-in-out infinite alternate;
+        }
+
+        .col-lg-6:nth-child(2) .glass-card {
+            animation-delay: -3s;
+        }
+
+        .glass-card:hover {
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            box-shadow: 0 20px 48px rgba(0, 0, 0, 0.6), 0 0 24px rgba(56, 189, 248, 0.25);
+            transform: translateY(-8px) scale(1.008);
+        }
+
+        .card-header-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .card-title-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Upload Dropzone */
+        .dropzone-container {
+            border: 2px dashed rgba(255, 255, 255, 0.14);
+            border-radius: 14px;
+            padding: 2.2rem 1.5rem;
+            text-align: center;
+            background: rgba(6, 8, 15, 0.4);
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 1.25rem;
+        }
+
+        .dropzone-container:hover {
+            border: 2px dashed rgba(56, 189, 248, 0.5);
+            background: rgba(56, 189, 248, 0.04);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+        }
+
+        .dropzone-container.dragover {
+            border: 2px dashed var(--cyan-electric) !important;
+            background: rgba(56, 189, 248, 0.12) !important;
+            transform: scale(1.025) !important;
+            box-shadow: 0 0 32px rgba(56, 189, 248, 0.35) !important;
+        }
+
+        .dropzone-icon {
+            font-size: 2.5rem;
+            color: #64748B;
+            margin-bottom: 0.85rem;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .dropzone-container:hover .dropzone-icon {
+            color: var(--cyan-electric);
+            transform: translateY(-3px);
+        }
+
+        .dropzone-title {
+            font-size: 0.96rem;
+            font-weight: 600;
+            color: #E2E8F0;
+            margin-bottom: 0.35rem;
+        }
+
+        .format-badge {
+            font-size: 0.68rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94A3B8;
+            border-radius: 6px;
+            margin: 0 2px;
+        }
+
+        /* Media Previews */
+        .preview-wrapper {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: #020617;
+            margin-bottom: 1.25rem;
+            min-height: 180px;
+            max-height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preview-media {
+            width: 100%;
+            height: 100%;
+            max-height: 280px;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* AI Laser Scanning Beam */
+        .scanner-beam {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, rgba(56, 189, 248, 0) 0%, #38BDF8 50%, rgba(56, 189, 248, 0) 100%);
+            box-shadow: 0 0 14px 4px rgba(56, 189, 248, 0.7);
+            z-index: 10;
+            display: none;
+            animation: scan-beam 2s ease-in-out infinite;
+        }
+
+        /* Pipeline Stages Display */
+        .stages-strip {
+            background: rgba(6, 8, 15, 0.55);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 0.65rem 0.9rem;
+            margin-bottom: 1.25rem;
+            font-size: 0.74rem;
+            color: #94A3B8;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+        }
+
+        .stage-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+        }
+
+        .stage-item.active {
+            color: var(--cyan-electric);
+        }
+
+        .stage-arrow {
+            color: #475569;
+            font-size: 0.68rem;
+        }
+
+        /* Action Buttons */
+        .btn-portal-action {
+            background: linear-gradient(135deg, #0EA5E9 0%, #6366F1 100%);
+            color: #FFFFFF;
+            font-weight: 600;
+            font-size: 0.92rem;
+            border-radius: 10px;
+            padding: 0.75rem 1.2rem;
+            border: none;
+            width: 100%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 16px rgba(14, 165, 233, 0.25);
+            cursor: pointer;
+        }
+
+        .btn-portal-action:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(99, 102, 241, 0.4);
+            color: #FFFFFF;
+        }
+
+        .btn-portal-action:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        /* Results Dashboard Section */
+        .results-dashboard {
+            margin-top: 3rem;
+            background: var(--card-glass);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55);
+            position: relative;
+        }
+
+        /* Status Prediction Chip */
+        .status-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            border-radius: 14px;
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        .status-chip-authentic {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(5, 150, 105, 0.25));
+            border: 1px solid rgba(16, 185, 129, 0.5);
+            color: #34D399;
+            box-shadow: 0 0 28px var(--mint-glow);
+        }
+
+        .status-chip-deepfake {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.18), rgba(220, 38, 38, 0.25));
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #F87171;
+            box-shadow: 0 0 28px var(--crimson-glow);
+        }
+
+        /* Dual Confidence Meters */
+        .meter-container {
+            background: rgba(6, 8, 15, 0.5);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .meter-label-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.86rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .meter-track {
+            height: 10px;
+            background: #1E293B;
+            border-radius: 9999px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .meter-fill-real {
+            height: 100%;
+            background: linear-gradient(90deg, #10B981 0%, #38BDF8 100%);
+            border-radius: 9999px;
+            transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .meter-fill-fake {
+            height: 100%;
+            background: linear-gradient(90deg, #F97316 0%, #EF4444 100%);
+            border-radius: 9999px;
+            transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Detailed Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .metric-card {
+            background: rgba(6, 8, 15, 0.45);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1rem 1.2rem;
+        }
+
+        .metric-title {
+            font-size: 0.74rem;
+            font-weight: 600;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.35rem;
+        }
+
+        .metric-value {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #F8FAFC;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Keyframes Preview Strip */
+        .keyframe-strip {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            margin-top: 0.85rem;
+        }
+
+        .keyframe-thumb {
+            width: 100%;
+            height: 64px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            transition: transform 0.2s ease, border-color 0.2s ease;
+            background: #020617;
+        }
+
+        .keyframe-thumb:hover {
+            transform: scale(1.08);
+            border-color: var(--cyan-electric);
+        }
+
+        /* Pipeline Progression Banner */
+        .pipeline-flow {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            margin-top: 1.5rem;
+            padding: 1rem 1.25rem;
+            background: rgba(6, 8, 15, 0.45);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+        }
+
+        .pipeline-step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #94A3B8;
+        }
+
+        .pipeline-step.active {
+            color: var(--cyan-electric);
+        }
+
+        .pipeline-step-badge {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--cyan-electric);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+        }
+
+        /* Disclaimer Alert */
+        .disclaimer-box {
+            margin-top: 1.5rem;
+            padding: 0.9rem 1.2rem;
+            background: rgba(15, 23, 42, 0.6);
+            border-left: 3px solid #64748B;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            color: #94A3B8;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        .portal-footer {
+            border-top: 1px solid var(--border-subtle);
+            padding: 1.8rem 0;
+            margin-top: auto;
+            text-align: center;
+            color: #64748B;
+            font-size: 0.8rem;
+            background: rgba(6, 8, 15, 0.5);
+        }
+
+        @media (max-width: 991px) {
+            .hero-headline {
+                font-size: 2.1rem;
+            }
+            .keyframe-strip {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient Glowing Gradient Orbs -->
+    <div class="ambient-glow ambient-glow-1"></div>
+    <div class="ambient-glow ambient-glow-2"></div>
+    <div class="ambient-glow ambient-glow-3"></div>
+
+    <div class="portal-content">
+
+        <!-- Navigation Bar -->
+        <nav class="portal-nav">
+            <div class="container d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                    <a href="/" class="text-decoration-none d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-shield-halved text-info fs-4"></i>
+                        <span class="brand-text">Deepfake Detection System</span>
+                    </a>
+                    <div class="status-pill d-none d-md-flex">
+                        <span class="status-dot"></span>
+                        AI System: Online
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge-ai d-none d-lg-inline-block">
+                        <i class="fa-solid fa-microchip me-1"></i> EfficientNet-B3
+                    </span>
+                    <span class="badge-ai d-none d-lg-inline-block">
+                        <i class="fa-solid fa-expand me-1"></i> MTCNN Face Detection
+                    </span>
+                    <span class="badge-ai d-none d-lg-inline-block">
+                        <i class="fa-solid fa-brain me-1"></i> LSTM Video Analysis
+                    </span>
+                    <a href="https://github.com/Ajayadithya-17/deepfake-detection-portal" target="_blank" class="nav-btn ms-2">
+                        <i class="fa-brands fa-github me-1"></i> GitHub
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero / Header Section -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="hero-badge">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    BSc Data Science Final-Year Project
+                </div>
+                <h1 class="hero-headline">
+                    Detecting Deepfakes with Artificial Intelligence.
+                </h1>
+                <p class="hero-tagline">
+                    AI-Based Deepfake Detection and Classification for Static Images and Video Streams Using MTCNN, EfficientNet-B3, and LSTM.
+                </p>
+            </div>
+        </section>
+
+        <!-- Main Portal Workspace -->
+        <main class="container pb-5">
+
+            <!-- Flash Error Message Banner -->
+            {% if error_message %}
+            <div class="alert alert-danger alert-dismissible fade show mb-4 bg-dark border-danger text-light" role="alert">
+                <i class="fa-solid fa-triangle-exclamation text-danger me-2"></i>
+                <strong>Processing Error:</strong> {{ error_message }}
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+
+            <!-- Dual Floating Diagnostic Cards (Side-by-Side Grid) -->
+            <div class="row g-4 align-items-stretch">
+
+                <!-- Card 1: Image Deepfake Detection -->
+                <div class="col-lg-6">
+                    <div class="glass-card">
+                        <div class="card-header-line">
+                            <div class="card-title-text">
+                                <i class="fa-solid fa-image text-info"></i>
+                                Image Deepfake Detection
+                            </div>
+                            <span class="badge bg-dark border border-secondary text-secondary">
+                                EfficientNet-B3
+                            </span>
+                        </div>
+
+                        <!-- Image Upload Form -->
+                        <form id="form-image" action="/predict_image" method="POST" enctype="multipart/form-data">
+                            
+                            <!-- Interactive Dropzone -->
+                            <div class="dropzone-container" id="dropzone-image" onclick="document.getElementById('image_file_input').click()">
+                                <i class="fa-solid fa-cloud-arrow-up dropzone-icon"></i>
+                                <div class="dropzone-title" id="image-dropzone-label">
+                                    Drag & Drop Face Image Here
+                                </div>
+                                <div class="text-secondary small mb-2">
+                                    or click to browse local files
+                                </div>
+                                <div>
+                                    <span class="format-badge">.JPG</span>
+                                    <span class="format-badge">.JPEG</span>
+                                    <span class="format-badge">.PNG</span>
+                                    <span class="format-badge">.WEBP</span>
+                                </div>
+                                <input type="file" id="image_file_input" name="image_file" accept=".jpg,.jpeg,.png,.webp" style="display: none;" onchange="handleImageFileSelected(this)" required>
+                            </div>
+
+                            <!-- Image Preview Area -->
+                            <div class="preview-wrapper" id="preview-image-wrapper" style="{% if media_type != 'image' %}display: none;{% endif %}">
+                                <div class="scanner-beam" id="scanner-image"></div>
+                                <img id="image-preview-element" src="{% if media_type == 'image' %}{{ media_path }}{% endif %}" class="preview-media" alt="Image Preview">
+                            </div>
+
+                            <!-- Processing Stages Strip -->
+                            <div class="stages-strip">
+                                <div class="stage-item active">
+                                    <i class="fa-solid fa-user-check"></i> Detecting Face (MTCNN)
+                                </div>
+                                <span class="stage-arrow">→</span>
+                                <div class="stage-item active">
+                                    <i class="fa-solid fa-microchip"></i> Extracting Features
+                                </div>
+                                <span class="stage-arrow">→</span>
+                                <div class="stage-item active">
+                                    <i class="fa-solid fa-network-wired"></i> AI Analysis (B3)
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" id="btn-submit-image" class="btn-portal-action">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <span>Inspect Image</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Card 2: Video Deepfake Detection -->
+                <div class="col-lg-6">
+                    <div class="glass-card">
+                        <div class="card-header-line">
+                            <div class="card-title-text">
+                                <i class="fa-solid fa-film text-warning"></i>
+                                Video Deepfake Detection
+                            </div>
+                            <span class="badge bg-dark border border-secondary text-secondary">
+                                CNN-LSTM (20 Frames)
+                            </span>
+                        </div>
+
+                        <!-- Video Upload Form -->
+                        <form id="form-video" action="/predict_video" method="POST" enctype="multipart/form-data">
+
+                            <!-- Interactive Dropzone -->
+                            <div class="dropzone-container" id="dropzone-video" onclick="document.getElementById('video_file_input').click()">
+                                <i class="fa-solid fa-video dropzone-icon"></i>
+                                <div class="dropzone-title" id="video-dropzone-label">
+                                    Drag & Drop Video Stream Here
+                                </div>
+                                <div class="text-secondary small mb-2">
+                                    or click to browse local video files
+                                </div>
+                                <div>
+                                    <span class="format-badge">.MP4</span>
+                                    <span class="format-badge">.MOV</span>
+                                    <span class="format-badge">.AVI</span>
+                                </div>
+                                <input type="file" id="video_file_input" name="video_file" accept=".mp4,.mov,.avi,.mkv" style="display: none;" onchange="handleVideoFileSelected(this)" required>
+                            </div>
+
+                            <!-- Video Preview Area -->
+                            <div class="preview-wrapper" id="preview-video-wrapper" style="{% if media_type != 'video' %}display: none;{% endif %}">
+                                <div class="scanner-beam" id="scanner-video"></div>
+                                <video id="video-preview-element" class="preview-media" controls>
+                                    <source src="{% if media_type == 'video' %}{{ media_path }}{% endif %}" type="video/mp4">
+                                    Your browser does not support HTML5 video preview.
+                                </video>
+                            </div>
+
+                            <!-- Processing Stages Strip -->
+                            <div class="stages-strip">
+                                <div class="stage-item active">
+                                    <i class="fa-solid fa-layer-group"></i> 20 Frames
+                                </div>
+                                <span class="stage-arrow">→</span>
+                                <div class="stage-item active">
+                                    <i class="fa-solid fa-user-gear"></i> MTCNN Faces
+                                </div>
+                                <span class="stage-arrow">→</span>
+                                <div class="stage-item active">
+                                    <i class="fa-solid fa-microchip"></i> B3 Embeddings
+                                </div>
+                                <span class="stage-arrow">→</span>
+                                <div class="stage-item active">
+                                    <i class="fa-solid fa-chart-line"></i> LSTM Fusion
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" id="btn-submit-video" class="btn-portal-action">
+                                <i class="fa-solid fa-chart-line"></i>
+                                <span>Process Video</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Deepfake Detection Results Dashboard (Dynamic Jinja Section) -->
+            {% if media_type %}
+            <section class="results-dashboard mt-5" id="results-section">
+                
+                <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+                    <div>
+                        <div class="text-secondary small fw-semibold text-uppercase letter-spacing-1 mb-1">
+                            Analysis Dashboard &bull; {{ media_type|upper }} EVALUATION
+                        </div>
+                        <h3 class="fw-bold text-white mb-0">
+                            Detection Analysis Report
+                        </h3>
+                    </div>
+
+                    <!-- Glowing Prediction Status Chip -->
+                    <div>
+                        {% if is_fake %}
+                        <div class="status-chip status-chip-deepfake">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            DEEPFAKE DETECTED
+                        </div>
+                        {% else %}
+                        <div class="status-chip status-chip-authentic">
+                            <i class="fa-solid fa-circle-check"></i>
+                            AUTHENTIC MEDIA DETECTED
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Dual Confidence Meters -->
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="meter-container">
+                            <div class="meter-label-row">
+                                <span class="text-secondary"><i class="fa-solid fa-shield-check me-1 text-success"></i> Real Confidence</span>
+                                <span class="text-success fw-bold">{{ real_conf }}%</span>
+                            </div>
+                            <div class="meter-track">
+                                <div class="meter-fill-real" style="width: {{ real_conf }}%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="meter-container">
+                            <div class="meter-label-row">
+                                <span class="text-secondary"><i class="fa-solid fa-radiation me-1 text-danger"></i> Deepfake Probability</span>
+                                <span class="text-danger fw-bold">{{ fake_conf }}%</span>
+                            </div>
+                            <div class="meter-track">
+                                <div class="meter-fill-fake" style="width: {{ fake_conf }}%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Timeline Preview Strip (When Media Type is Video) -->
+                {% if media_type == 'video' and frames %}
+                <div class="mt-3 p-3 rounded bg-dark bg-opacity-50 border border-secondary border-opacity-25">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="text-secondary small fw-semibold">
+                            <i class="fa-solid fa-film text-warning me-1"></i> Sampled Facial Sequence (6 Keyframe Face Thumbnails):
+                        </div>
+                        <span class="badge bg-dark border border-secondary text-secondary">Equidistant Sampling</span>
+                    </div>
+                    <div class="keyframe-strip">
+                        {% for f_path in frames[:6] %}
+                        <img src="{{ f_path }}" class="keyframe-thumb" alt="Sampled Face Keyframe">
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Detailed AI Analysis Metrics Grid -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-title">Face Detection Status</div>
+                        <div class="metric-value text-info">
+                            {% if face_detected %}
+                            <i class="fa-solid fa-circle-check text-success me-1"></i> MTCNN Localized
+                            {% else %}
+                            <i class="fa-solid fa-circle-notch text-secondary me-1"></i> Full Frame Evaluated
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-title">Faces Detected</div>
+                        <div class="metric-value">
+                            {{ faces_detected or (1 if face_detected else 0) }} Subject(s)
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-title">Facial Resolution</div>
+                        <div class="metric-value">
+                            {{ resolution or '300 × 300 px' }}
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-title">Primary Bounding Box</div>
+                        <div class="metric-value text-secondary">
+                            {{ bbox_str or 'Aligned Face Crop' }}
+                        </div>
+                    </div>
+
+                    {% if media_type == 'video' %}
+                    <div class="metric-card">
+                        <div class="metric-title">Total Frames Processed</div>
+                        <div class="metric-value">
+                            {{ frames_analyzed or 20 }} Frames
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-title">Frame Sampling Rate</div>
+                        <div class="metric-value text-secondary">
+                            {{ sampling_rate or 'Equidistant Temporal' }}
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-title">Valid Face Frames</div>
+                        <div class="metric-value text-info">
+                            {{ faces_detected or 20 }} / {{ frames_analyzed or 20 }} Frames
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-title">LSTM Temporal Status</div>
+                        <div class="metric-value text-success">
+                            {{ lstm_status or 'Active (Bidirectional)' }}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- AI Processing Pipeline Architecture Display -->
+                <div class="pipeline-flow" id="pipeline">
+                    <span class="text-secondary small fw-bold text-uppercase me-2">
+                        <i class="fa-solid fa-diagram-project me-1"></i> Forensic Pipeline:
+                    </span>
+                    <div class="pipeline-step active">
+                        <span class="pipeline-step-badge">1</span>
+                        <span>MTCNN Face Alignment</span>
+                    </div>
+                    <span class="stage-arrow">→</span>
+                    <div class="pipeline-step active">
+                        <span class="pipeline-step-badge">2</span>
+                        <span>EfficientNet-B3 Feature Analysis</span>
+                    </div>
+                    {% if media_type == 'video' %}
+                    <span class="stage-arrow">→</span>
+                    <div class="pipeline-step active">
+                        <span class="pipeline-step-badge">3</span>
+                        <span>LSTM Temporal Sequence Modeling</span>
+                    </div>
+                    {% endif %}
+                    <span class="stage-arrow">→</span>
+                    <div class="pipeline-step active">
+                        <span class="pipeline-step-badge">{{ '4' if media_type == 'video' else '3' }}</span>
+                        <span>Final Classification ({{ prediction }})</span>
+                    </div>
+                </div>
+           
+
+            </section>
+            {% endif %}
+
+        </main>
+
+        <!-- Portal Footer -->
+        <footer class="portal-footer">
+            <div class="container">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                    <div>
+                        <strong>Deepfake Detection System</strong> &bull; Final-Year BSc Data Science Project &bull; 2026
+                    </div>
+                    <div class="d-flex gap-3">
+                        <span>EfficientNet-B3</span>
+                        <span>MTCNN</span>
+                        <span>Bidirectional LSTM</span>
+                        <span>TensorFlow / Keras 3</span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Bootstrap 5 JavaScript Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Vanilla JavaScript Interactions & Pipeline Animations -->
+    <script>
+        // File extension validators
+        const VALID_IMAGE_EXTS = ['.jpg', '.jpeg', '.png', '.webp'];
+        const VALID_VIDEO_EXTS = ['.mp4', '.mov', '.avi', '.mkv'];
+
+        function isFileValid(fileName, allowedList) {
+            const lower = fileName.toLowerCase();
+            return allowedList.some(ext => lower.endsWith(ext));
+        }
+
+        // Image Selection Handler
+        function handleImageFileSelected(input) {
+            if (!input.files || input.files.length === 0) return;
+            const file = input.files[0];
+
+            if (!isFileValid(file.name, VALID_IMAGE_EXTS)) {
+                alert('Invalid file format. Please choose an image in .JPG, .JPEG, .PNG, or .WEBP format.');
+                input.value = '';
+                return;
+            }
+
+            document.getElementById('image-dropzone-label').innerHTML = `
+                <span class="text-info"><i class="fa-solid fa-file-image me-1"></i> ${file.name}</span>
+            `;
+
+            // Instant Client-Side Image Preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const previewEl = document.getElementById('image-preview-element');
+                previewEl.src = e.target.result;
+                document.getElementById('preview-image-wrapper').style.display = 'flex';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Video Selection Handler
+        function handleVideoFileSelected(input) {
+            if (!input.files || input.files.length === 0) return;
+            const file = input.files[0];
+
+            if (!isFileValid(file.name, VALID_VIDEO_EXTS)) {
+                alert('Invalid file format. Please choose a video in .MP4, .MOV, or .AVI format.');
+                input.value = '';
+                return;
+            }
+
+            document.getElementById('video-dropzone-label').innerHTML = `
+                <span class="text-warning"><i class="fa-solid fa-file-video me-1"></i> ${file.name}</span>
+            `;
+
+            // Instant Client-Side Video Preview
+            const videoUrl = URL.createObjectURL(file);
+            const videoEl = document.getElementById('video-preview-element');
+            videoEl.src = videoUrl;
+            document.getElementById('preview-video-wrapper').style.display = 'flex';
+            videoEl.load();
+        }
+
+        // Image Form Submit with Laser Scanning Animation
+        document.getElementById('form-image').addEventListener('submit', function(e) {
+            const input = document.getElementById('image_file_input');
+            if (!input.files || input.files.length === 0) {
+                e.preventDefault();
+                alert('Please select an image file first.');
+                return;
+            }
+
+            const btn = document.getElementById('btn-submit-image');
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin me-2"></i> Detecting Face & Analyzing Features...`;
+            btn.disabled = true;
+
+            // Activate illuminated laser scanner
+            const scanner = document.getElementById('scanner-image');
+            if (scanner) scanner.style.display = 'block';
+        });
+
+        // Video Form Submit with Laser Scanning Animation
+        document.getElementById('form-video').addEventListener('submit', function(e) {
+            const input = document.getElementById('video_file_input');
+            if (!input.files || input.files.length === 0) {
+                e.preventDefault();
+                alert('Please select a video file first.');
+                return;
+            }
+
+            const btn = document.getElementById('btn-submit-video');
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin me-2"></i> Extracting 20 Frames & Evaluating LSTM...`;
+            btn.disabled = true;
+
+            // Activate illuminated laser scanner
+            const scanner = document.getElementById('scanner-video');
+            if (scanner) scanner.style.display = 'block';
+        });
+
+        // Setup Drag & Drop Handlers for Both Diagnostic Dropzones
+        function setupDragDrop(zoneId, inputId, validator, onSelected) {
+            const zone = document.getElementById(zoneId);
+            const input = document.getElementById(inputId);
+            if (!zone || !input) return;
+
+            ['dragenter', 'dragover'].forEach(name => {
+                zone.addEventListener(name, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    zone.classList.add('dragover');
+                });
+            });
+
+            ['dragleave', 'drop'].forEach(name => {
+                zone.addEventListener(name, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    zone.classList.remove('dragover');
+                });
+            });
+
+            zone.addEventListener('drop', (e) => {
+                const files = e.dataTransfer.files;
+                if (!files || files.length === 0) return;
+
+                if (!validator(files[0].name)) {
+                    alert('Unsupported file type dropped.');
+                    return;
+                }
+
+                input.files = files;
+                onSelected(input);
+            });
+        }
+
+        setupDragDrop('dropzone-image', 'image_file_input', (name) => isFileValid(name, VALID_IMAGE_EXTS), handleImageFileSelected);
+        setupDragDrop('dropzone-video', 'video_file_input', (name) => isFileValid(name, VALID_VIDEO_EXTS), handleVideoFileSelected);
+
+        // Smooth scroll to results if evaluated
+        {% if media_type %}
+        window.addEventListener('DOMContentLoaded', () => {
+            const resultsSection = document.getElementById('results-section');
+            if (resultsSection) {
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+        {% endif %}
+    </script>
+</body>
+</html>
