@@ -22,82 +22,96 @@ from tensorflow.keras.applications.efficientnet import preprocess_input
 
 TARGET_SIZE = (300, 300)
 
-
 def preprocess_face_for_model(face_bgr, target_size=TARGET_SIZE):
     """
-    Prepares a cropped BGR face image for EfficientNet-B3 model inference.
-
-    Args:
-        face_bgr (np.ndarray): Cropped face image in BGR format.
-        target_size (tuple): Target (height, width), defaults to (300, 300).
-
-    Returns:
-        np.ndarray: Preprocessed batch tensor of shape (1, 300, 300, 3).
+    Preprocesses a face image for the EfficientNet-B3 model.
+    Returns an image with shape: (1, 300, 300, 3).
     """
-    if face_bgr is None or face_bgr.size == 0:
-        return np.zeros((1, target_size[0], target_size[1], 3), dtype=np.float32)
 
-    # Convert BGR to RGB
+    # Handle empty or invalid images
+    if face_bgr is None or face_bgr.size == 0:
+        return np.zeros(
+            (1, target_size[0], target_size[1], 3),
+            dtype=np.float32
+        )
+
+    # OpenCV loads images in BGR format, so convert to RGB
     face_rgb = cv2.cvtColor(face_bgr, cv2.COLOR_BGR2RGB)
 
-    # Resize to EfficientNet-B3 input resolution
-    if (face_rgb.shape[0], face_rgb.shape[1]) != target_size:
-        face_rgb = cv2.resize(face_rgb, target_size, interpolation=cv2.INTER_AREA)
+    # Resize to EfficientNet-B3 input size
+    face_rgb = cv2.resize(face_rgb, target_size)
 
-    # Convert to float array
-    img_array = np.array(face_rgb, dtype=np.float32)
+    # Convert to float32
+    face_rgb = face_rgb.astype(np.float32)
 
-    # Apply EfficientNet-B3 preprocessing
-    img_array = preprocess_input(img_array)
+    # Apply EfficientNet preprocessing
+    face_rgb = preprocess_input(face_rgb)
 
-    # Expand batch dimension: (1, 300, 300, 3)
-    return np.expand_dims(img_array, axis=0)
+    # Add batch dimension
+    face_rgb = np.expand_dims(face_rgb, axis=0)
 
-
-def get_data_augmentation_layers():
-    """
-    Builds a Keras sequential data augmentation pipeline for training.
-    Applies spatial perturbations to prevent overfitting on specific lighting
-    and compression artifacts.
-    """
-    return tf.keras.Sequential([
-        tf.keras.layers.RandomFlip("horizontal"),
-        tf.keras.layers.RandomRotation(0.08),
-        tf.keras.layers.RandomZoom(0.08),
-        tf.keras.layers.RandomContrast(0.08),
-    ], name="data_augmentation")
+    return face_rgb
 
 
 def load_dataset_file_paths(dataset_dir):
     """
     Scans the dataset directory and returns file paths and binary labels:
-    0 = REAL, 1 = FAKE (DEEPFAKE).
-
-    Args:
-        dataset_dir (str): Root dataset directory containing 'real/images' and 'fake/images'.
-
-    Returns:
-        tuple: (file_paths_list, labels_list)
+    0 = REAL, 1 = FAKE.
+    Supports:
+        dataset/real/
+        dataset/real/images/
+        dataset/fake/
+        dataset/fake/images/
     """
+
     file_paths = []
     labels = []
 
-    real_dir = os.path.join(dataset_dir, 'real', 'images')
-    fake_dir = os.path.join(dataset_dir, 'fake', 'images')
+    valid_exts = {
+        ".jpg",
+        ".jpeg",
+        ".png",
+        ".webp",
+        ".bmp"
+    }
 
-    valid_exts = ('.jpg', '.jpeg', '.png', '.webp')
+    dataset_dir = os.path.abspath(dataset_dir)
 
-    if os.path.exists(real_dir):
-        for f in sorted(os.listdir(real_dir)):
-            if f.lower().endswith(valid_exts):
-                file_paths.append(os.path.join(real_dir, f))
-                labels.append(0)  # Real
+    if not os.path.exists(dataset_dir):
+        print(f"ERROR: Dataset directory not found: {dataset_dir}")
+        return [], []
 
-    if os.path.exists(fake_dir):
-        for f in sorted(os.listdir(fake_dir)):
-            if f.lower().endswith(valid_exts):
-                file_paths.append(os.path.join(fake_dir, f))
-                labels.append(1)  # Deepfake
+    # Search recursively for all image files
+    for file_path in sorted(os.listdir(dataset_dir)):
+        class_dir = os.path.join(dataset_dir, file_path)
+
+        if not os.path.isdir(class_dir):
+            continue
+
+        class_name = file_path.lower().strip()
+
+        # REAL = 0
+        if class_name in {"real", "reals", "real_images", "authentic"}:
+            label = 0
+
+        # FAKE = 1
+        elif class_name in {"fake", "fakes", "fake_images", "deepfake", "deepfakes"}:
+            label = 1
+
+        else:
+            continue
+
+        for image_path in os.walk(class_dir):
+            current_root, _, filenames = image_path
+
+            for filename in sorted(filenames):
+                full_path = os.path.join(current_root, filename)
+
+                if os.path.isfile(full_path):
+                    extension = os.path.splitext(filename)[1].lower()
+
+                    if extension in valid_exts:
+                        file_paths.append(full_path)
+                        labels.append(label)
 
     return file_paths, labels
-

@@ -18,6 +18,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
 import cv2
+import math
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
@@ -25,11 +26,15 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix, f1_score, precision_score, recall_score, accuracy_score
+from tensorflow.keras.applications.efficientnet import preprocess_input
 
 import tensorflow as tf
 from tensorflow.keras import layers, models, optimizers, callbacks
 from tensorflow.keras.applications import EfficientNetB3
 from preprocessing.image_preprocessing import preprocess_face_for_model, TARGET_SIZE, load_dataset_file_paths
+
+TARGET_SIZE = (300, 300)
+
 
 MODEL_SAVE_PATH = os.path.join('models', 'image_model.keras')
 CM_SAVE_PATH = os.path.join('models', 'image_confusion_matrix.png')
@@ -65,7 +70,8 @@ def build_efficientnet_b3_classifier(input_shape=(300, 300, 3), learning_rate=1e
     return model
 
 
-def train_image_model(dataset_dir='dataset', epochs=5, batch_size=8):
+def train_image_model(dataset_dir='data/image_dataset', epochs=5, batch_size=8):
+
     """
     Loads dataset, partitions into 70/15/15 splits, trains model, and generates evaluation metrics.
     """
@@ -74,7 +80,25 @@ def train_image_model(dataset_dir='dataset', epochs=5, batch_size=8):
     print("Step 1: Loading Dataset & Splitting (70% Train, 15% Val, 15% Test)")
     print("==================================================================")
 
-    file_paths, labels = load_dataset_file_paths(dataset_dir)
+    file_paths, labels = load_dataset_file_paths("data/image_dataset")
+
+    real_paths = [p for p, y in zip(file_paths, labels) if y == 0][:5000]
+    fake_paths = [p for p, y in zip(file_paths, labels) if y == 1][:5000]
+
+    file_paths = real_paths + fake_paths
+    labels = [0] * len(real_paths) + [1] * len(fake_paths)
+
+    print(f"Training dataset selected: {len(file_paths)}")
+    print(f"REAL: {labels.count(0)}")
+    print(f"FAKE: {labels.count(1)}")
+
+    file_paths = real_paths + fake_paths
+    labels = [0] * len(real_paths) + [1] * len(fake_paths)
+
+    print(f"Quick test dataset: {len(file_paths)} images")
+    print(f"REAL: {labels.count(0)}")
+    print(f"FAKE: {labels.count(1)}")
+
     if len(file_paths) == 0:
         raise ValueError(f"No valid images found in {dataset_dir}. Please ensure dataset/real/images and dataset/fake/images exist.")
 
@@ -113,15 +137,15 @@ def train_image_model(dataset_dir='dataset', epochs=5, batch_size=8):
     train_gen = data_generator(train_paths, train_y, batch_sz=batch_size, is_training=True)
     val_gen = data_generator(val_paths, val_y, batch_sz=batch_size, is_training=False)
 
-    train_steps = max(1, len(train_paths) // batch_size)
-    val_steps = max(1, len(val_paths) // batch_size)
+    train_steps = math.ceil(len(train_paths) / batch_size)
+    val_steps = math.ceil(len(val_paths) / batch_size)
 
     print("\nStep 2: Compiling EfficientNet-B3 Model Architecture")
     model = build_efficientnet_b3_classifier()
     model.summary()
 
     training_callbacks = [
-        callbacks.EarlyStopping(monitor='val_loss', patience=4, restore_best_weights=True, verbose=1),
+        callbacks.EarlyStopping(monitor="val_loss",patience=4,min_delta=0.001,restore_best_weights=True,verbose=1),
         callbacks.ModelCheckpoint(filepath=MODEL_SAVE_PATH, monitor='val_accuracy', save_best_only=True, verbose=1),
         callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=2, min_lr=1e-6, verbose=1)
     ]
