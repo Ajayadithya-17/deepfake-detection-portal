@@ -659,9 +659,9 @@
                         <i class="fa-solid fa-expand me-1"></i> MTCNN Face Detection
                     </span>
                     <span class="badge-ai d-none d-lg-inline-block">
-                        <i class="fa-solid fa-brain me-1"></i> LSTM Video Analysis
+                        <i class="fa-solid fa-brain me-1"></i> EfficientNet-B3 Video Analysis
                     </span>
-                    <a href="https://github.com/Ajayadithya-17/deepfake-detection-portal" target="_blank" class="nav-btn ms-2">
+                    <a href="https://github.com/Ajayadithya-17/deepfake-detection-portal_V2" target="_blank" class="nav-btn ms-2">
                         <i class="fa-brands fa-github me-1"></i> GitHub
                     </a>
                 </div>
@@ -679,7 +679,7 @@
                     Detecting Deepfakes with Artificial Intelligence.
                 </h1>
                 <p class="hero-tagline">
-                    AI-Based Deepfake Detection and Classification for Static Images and Video Streams Using MTCNN, EfficientNet-B3, and LSTM.
+                    AI-Based Deepfake Detection and Classification for Static Images and Video Streams Using MTCNN and EfficientNet-B3.
                 </p>
             </div>
         </section>
@@ -772,7 +772,7 @@
                                 Video Deepfake Detection
                             </div>
                             <span class="badge bg-dark border border-secondary text-secondary">
-                                CNN-LSTM (20 Frames)
+                                EfficientNet-B3 (20 Frames)
                             </span>
                         </div>
 
@@ -816,11 +816,11 @@
                                 </div>
                                 <span class="stage-arrow">→</span>
                                 <div class="stage-item active">
-                                    <i class="fa-solid fa-microchip"></i> B3 Embeddings
+                                    <i class="fa-solid fa-microchip"></i> EfficientNet-B3 Frame Classification
                                 </div>
                                 <span class="stage-arrow">→</span>
                                 <div class="stage-item active">
-                                    <i class="fa-solid fa-chart-line"></i> LSTM Fusion
+                                    <i class="fa-solid fa-chart-line"></i> Probability Aggregation
                                 </div>
                             </div>
 
@@ -966,9 +966,9 @@
                     </div>
 
                     <div class="metric-card">
-                        <div class="metric-title">LSTM Temporal Status</div>
+                        <div class="metric-title">Video Analysis Method</div>
                         <div class="metric-value text-success">
-                            {{ lstm_status or 'Active (Bidirectional)' }}
+                            {{ video_analysis_method or 'EfficientNet-B3 Frame Analysis' }}
                         </div>
                     </div>
                     {% endif %}
@@ -986,13 +986,13 @@
                     <span class="stage-arrow">→</span>
                     <div class="pipeline-step active">
                         <span class="pipeline-step-badge">2</span>
-                        <span>EfficientNet-B3 Feature Analysis</span>
+                        <span>EfficientNet-B3 Frame Classification</span>
                     </div>
                     {% if media_type == 'video' %}
                     <span class="stage-arrow">→</span>
                     <div class="pipeline-step active">
                         <span class="pipeline-step-badge">3</span>
-                        <span>LSTM Temporal Sequence Modeling</span>
+                        <span>Frame Probability Aggregation</span>
                     </div>
                     {% endif %}
                     <span class="stage-arrow">→</span>
@@ -1018,7 +1018,6 @@
                     <div class="d-flex gap-3">
                         <span>EfficientNet-B3</span>
                         <span>MTCNN</span>
-                        <span>Bidirectional LSTM</span>
                         <span>TensorFlow / Keras 3</span>
                     </div>
                 </div>
@@ -1117,7 +1116,7 @@
             }
 
             const btn = document.getElementById('btn-submit-video');
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin me-2"></i> Extracting 20 Frames & Evaluating LSTM...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin me-2"></i> Extracting 20 Frames & Analyzing with EfficientNet-B3...`;
             btn.disabled = true;
 
             // Activate illuminated laser scanner

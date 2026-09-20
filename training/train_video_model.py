@@ -69,7 +69,7 @@ def extract_features_from_sequence(extractor, sequence_tensor):
     return np.expand_dims(features, axis=0)  # (1, num_frames, 1536)
 
 
-def train_video_model(dataset_dir='data/video_dataset', epochs=5):
+def train_video_model(dataset_dir='dataset', epochs=5):
     """
     Gathers video dataset, extracts temporal sequences, extracts features,
     and trains the Bidirectional LSTM model.
@@ -148,4 +148,3 @@ def train_video_model(dataset_dir='data/video_dataset', epochs=5):
 
 if __name__ == '__main__':
     train_video_model(epochs=5)
-

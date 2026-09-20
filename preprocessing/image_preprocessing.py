@@ -1,13 +1,13 @@
 """
 =============================================================================
-Deepfake Detection System - Image Preprocessing & Augmentation Pipeline
+Deepfake Detection System - Image Preprocessing Pipeline
 =============================================================================
 BSc Data Science Final-Year Project:
 "AI-Based Deepfake Detection System Using Deep Learning"
 
 Standardizes input images to the EfficientNet-B3 native input resolution
-(300x300x3), applies ImageNet-calibrated normalization, and provides data
-augmentation utilities for deep learning model training and evaluation.
+(300x300x3), applies ImageNet-calibrated normalization, and provides dataset 
+file-path loading utilities for deep learning model training and evaluation.
 =============================================================================
 """
 

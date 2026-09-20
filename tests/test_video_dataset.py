@@ -3,7 +3,7 @@ Video-Level Evaluation using Celeb-DF V2 Cropped Frames
 
 Each folder represents one source video.
 We sample up to 20 frames from each folder, run the trained
-EfficientNet-B3 image model, average the frame probabilities,
+EfficientNet-B3 frame classifier, average the frame probabilities,
 and produce one prediction for the entire video.
 """
 

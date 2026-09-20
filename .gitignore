@@ -13,7 +13,6 @@ models/saved/
 *.pth
 *.pt
 *.h5
-*.keras
 
 logs/
 
